@@ -1,0 +1,30 @@
+#ifndef DATEFORMATTER_HPP_
+#define DATEFORMATTER_HPP_
+ 
+class DateFormatter{
+    private:
+	
+    public:
+	DateFormatter();
+	~DateFormatter();
+    std::string format(const Date& d) const;
+};
+
+class ComputerDateFormatter : public DateFormatter{
+    private:
+	
+    public:
+	ComputerDateFormatter();
+	~ComputerDateFormatter();
+};
+
+class GermanDateFormatter : public DateFormatter{
+    private:
+	
+    public:
+	GermanDateFormatter();
+	~GermanDateFormatter();
+};
+
+
+#endif /* DATEFORMATTER_HPP_ */
