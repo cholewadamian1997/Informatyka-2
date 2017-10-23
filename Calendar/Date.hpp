@@ -1,7 +1,8 @@
 #ifndef DATA_HPP_
 #define DATA_HPP_
 
-#include <ostream> 
+#include <ostream>
+#include <array>
 
 class Date{
 	private:
@@ -9,7 +10,20 @@ class Date{
 	int day;
 	int month;
 	int year;
-	int tab[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
+	const std::array<const int, 12> daysInMonths = {
+        31, // Jan
+        28, // Feb
+        31, // Mar
+        30, // Apr
+        31, // May
+        30, // Jun
+        31, // Jul
+        31, // Aug
+        30, // Sep
+        31, // Oct
+        30, // Nov
+        31  // Dec
+        };
 
 	public:
 
@@ -21,6 +35,8 @@ class Date{
     	Date operator-(const Date &date); //Asia
     	bool operator==(const Date &date); //Damian
     	bool operator!=(const Date &date); //Damian
+    	Date operator+=(const Date &date);
+    	Date operator-=(const Date &date);
     	friend std::ostream &operator<<(ostream &out, const Date &date); //Damian
 
 };
