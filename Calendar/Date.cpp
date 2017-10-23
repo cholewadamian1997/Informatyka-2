@@ -73,3 +73,15 @@ ostream& operator<<(ostream out, Date &date)
 	return out;
 
 }
+
+Date::showDate()
+{
+	cout<<"Date: "<<day<<"-"<<month<<"-"<<year<<endl; 
+}
+
+Date (const Date &date)
+{
+	day=date.day;
+	month=date.month;
+	year=date.year;
+}
