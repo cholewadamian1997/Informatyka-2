@@ -2,6 +2,49 @@
 
 using namespace std;
 
+Date Date::operator+(int days)
+{
+    day += days;
+    while(day > daysInMonths[month-1])
+    {
+        month++;
+        day -= daysInMonths[month-1];
+
+        while(month > 12)
+        {
+            year++;
+            month -= 12;
+        }
+    }
+    return *this;
+}
+
+Date Date::operator-(int days)
+{
+    day -= days;
+    while(day < 1)
+    {
+        month--;
+        day += daysInMonths[month-1];
+
+        while(month < 0)
+        {
+            year--;
+            month += 12;
+        }
+    }
+    return *this;
+}
+
+Date Date::operator-(const Date &date)
+{
+    year - date.year;
+    month - date.month;
+    *this - date.days;
+
+    return *this;
+}
+
 bool Date::operator==(const Date &date)
 {
 	if (day != date.day)
