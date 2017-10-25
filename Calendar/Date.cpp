@@ -1,8 +1,54 @@
-#include "Date.hpp"
+#include "data.hpp"
 
 using namespace std;
 
+Date::Date(const Date &date)
+{
+	day = date.day;
+	month = date.month;
+	year = date.year;
+}
+
 Date Date::operator+(int days)
+{
+	Date newDate(*this);
+
+
+	newDate.day = day + days;
+    while(newDate.day > newDate.daysInMonths[month-1])
+    {
+        newDate.month++;
+        newDate.day -= newDate.daysInMonths[month-1];
+
+        while(newDate.month > 12)
+        {
+            newDate.year++;
+            newDate.month -= 12;
+        }
+    }
+    return newDate;
+}
+
+Date Date::operator-(int days)
+{
+	Date newDate(*this);
+
+	newDate.day = day - days;
+    while(newDate.day < 1)
+    {
+        newDate.month--;
+        newDate.day += newDate.daysInMonths[month-1];
+
+        while(newDate.month < 1)
+        {
+            newDate.year--;
+            newDate.month += 12;
+        }
+    }
+    return newDate;
+}
+
+Date Date::operator+=(int days)
 {
     day += days;
     while(day > daysInMonths[month-1])
@@ -19,7 +65,7 @@ Date Date::operator+(int days)
     return *this;
 }
 
-Date Date::operator-(int days)
+Date Date::operator-=(int days)
 {
     day -= days;
     while(day < 1)
@@ -27,7 +73,7 @@ Date Date::operator-(int days)
         month--;
         day += daysInMonths[month-1];
 
-        while(month < 0)
+        while(month < 1)
         {
             year--;
             month += 12;
@@ -36,11 +82,12 @@ Date Date::operator-(int days)
     return *this;
 }
 
+
 Date Date::operator-(const Date &date)
 {
     year - date.year;
     month - date.month;
-    *this - date.days;
+    *this - date.day;
 
     return *this;
 }
@@ -66,7 +113,7 @@ bool Date::operator!=(const Date &date)
 
 }
 
-ostream& operator<<(ostream out, Date &date)
+std::ostream &operator<<(std::ostream &out, const Date &date)
 {
 	out << "date: " << date.day << "-" << date.month << "-" << date.year << endl;
 
@@ -74,14 +121,6 @@ ostream& operator<<(ostream out, Date &date)
 
 }
 
-Date::showDate()
-{
-	cout<<"Date: "<<day<<"-"<<month<<"-"<<year<<endl; 
-}
 
-Date (const Date &date)
-{
-	day=date.day;
-	month=date.month;
-	year=date.year;
-}
+
+
