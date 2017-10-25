@@ -1,7 +1,7 @@
 #ifndef DATA_HPP_
 #define DATA_HPP_
 
-#include <ostream>
+#include <iostream>
 #include <array>
 
 class Date{
@@ -27,17 +27,16 @@ class Date{
 
 	public:
 
-	Date(int _day = 1, int _month = 1, int _year = 1970);
-	Date (const Date & date); //Szymon
-	showDate(); //Szymon
-    	Date operator+(int days); //Asia
-    	Date operator-(int days); //Asia
-    	Date operator-(const Date &date); //Asia
-    	bool operator==(const Date &date); //Damian
-    	bool operator!=(const Date &date); //Damian
-    	Date operator+=(const Date &date);
-    	Date operator-=(const Date &date);
-    	friend std::ostream &operator<<(ostream &out, const Date &date); //Damian
+		Date(int _day = 1, int _month = 1, int _year = 1970,array _daysInMonths);
+		Date(const Date & date);
+    	Date operator+(int days);
+    	Date operator-(int days);
+    	Date operator-(const Date &date);
+    	bool operator==(const Date &date);
+    	bool operator!=(const Date &date);
+    	Date operator+=(int days);
+    	Date operator-=(int days);
+    	friend std::ostream &operator<<(std::ostream &out, const Date &date);
 
 };
 #endif /* DATA_HPP_ */
