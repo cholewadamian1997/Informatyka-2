@@ -1,6 +1,60 @@
-#include "data.hpp"
+#include "Date.hpp"
 
-using namespace std;
+/*
+int Date::getDay()
+{
+    return day;
+}
+
+int Date::getMonth()
+{
+    return month;
+}
+
+int Date::getYear()
+{
+    return year;
+}
+*/
+
+int Date::dateToDays()
+{
+    int days = (year - 1970) * 365;
+
+    for (int i = month-1; i > 0; i--)
+    {
+        days += daysInMonths[i-1];
+    }
+
+    days += day-1;
+    return days;
+}
+
+Date Date::daysToDate(int days)
+{
+    month = 1;
+
+
+    year = int (days/365) + 1970;
+    days = days % 365;
+
+    for(int i = 0; days > daysInMonths[i]; i++)
+    {
+        month++;
+        days -= daysInMonths[i];
+    }
+
+    day = days+1;
+
+}
+
+
+Date::Date(int _day, int _month , int _year)
+{
+    day = _day;
+    month = _month;
+    year = _year;
+}
 
 Date::Date(const Date &date)
 {
@@ -13,99 +67,45 @@ Date Date::operator+(int days)
 {
 	Date newDate(*this);
 
-
-	newDate.day = day + days;
-    while(newDate.day > newDate.daysInMonths[month-1])
-    {
-        newDate.month++;
-        newDate.day -= newDate.daysInMonths[month-1];
-
-        while(newDate.month > 12)
-        {
-            newDate.year++;
-            newDate.month -= 12;
-        }
-    }
+    newDate.daysToDate(newDate.dateToDays() + days);
     return newDate;
+}
+
+Date Date::operator+=(int days)
+{
+    (*this).daysToDate(dateToDays()+days);
+    return *this;
 }
 
 Date Date::operator-(int days)
 {
 	Date newDate(*this);
 
-	newDate.day = day - days;
-    while(newDate.day < 1)
-    {
-        newDate.month--;
-        newDate.day += newDate.daysInMonths[month-1];
-
-        while(newDate.month < 1)
-        {
-            newDate.year--;
-            newDate.month += 12;
-        }
-    }
+    newDate.daysToDate(newDate.dateToDays() - days);
     return newDate;
-}
-
-Date Date::operator+=(int days)
-{
-    day += days;
-    while(day > daysInMonths[month-1])
-    {
-        month++;
-        day -= daysInMonths[month-1];
-
-        while(month > 12)
-        {
-            year++;
-            month -= 12;
-        }
-    }
-    return *this;
 }
 
 Date Date::operator-=(int days)
 {
-    day -= days;
-    while(day < 1)
-    {
-        month--;
-        day += daysInMonths[month-1];
-
-        while(month < 1)
-        {
-            year--;
-            month += 12;
-        }
-    }
+    (*this).daysToDate(dateToDays()-days);
     return *this;
 }
 
 
-Date Date::operator-(const Date &date)
+int Date::operator-(Date &date)
 {
-    year - date.year;
-    month - date.month;
-    *this - date.day;
-
-    return *this;
+    int days = dateToDays() - date.dateToDays();
+    return days;
 }
 
-bool Date::operator==(const Date &date)
+bool Date::operator==(Date &date)
 {
-	if (day != date.day)
-		return false;
-	if (month != date.month)
-		return false;
-	if (year != date.year)
-		return false;
-
-	return true;
-
+    if (dateToDays() == date.dateToDays())
+        return true;
+    return false;
 }
 
-bool Date::operator!=(const Date &date)
+bool Date::operator!=(Date &date)
 {
 	if (*this == date)
 		return false;
