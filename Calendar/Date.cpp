@@ -1,21 +1,19 @@
 #include "Date.hpp"
 
-/*
+
 int Date::getDay()
 {
     return day;
 }
-
 int Date::getMonth()
 {
     return month;
 }
-
 int Date::getYear()
 {
     return year;
 }
-*/
+
 
 int Date::dateToDays()
 {
@@ -45,6 +43,7 @@ Date Date::daysToDate(int days)
     }
 
     day = days+1;
+    return day;
 
 }
 
@@ -120,7 +119,6 @@ std::ostream &operator<<(std::ostream &out, const Date &date)
 	return out;
 
 }
-
 
 
 
