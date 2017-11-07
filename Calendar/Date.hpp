@@ -58,3 +58,5 @@ const std::array<const int, 12> daysInMonths = {
 };
 
 #endif /* DATA_HPP_ */
+
+
