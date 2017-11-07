@@ -1,5 +1,5 @@
 #include "Date.hpp"
-
+#include "DateFormatter.hpp"
 
 int main(){
 
@@ -20,6 +20,14 @@ int main(){
    date1 -= days;
    cout << "date " << days <<" before date1: " << date1 << endl;
 
+   ComputerDateFormatter formatC;
+   GermanDateFormatter formatG;
+
+   std::string strC = formatC.Format(date2);
+   std::string strG = formatG.Format(date2);
+
+   cout << "strC: " << strC << endl;
+   cout << "strG: " << strG << endl;
 
 return 0;
 }
