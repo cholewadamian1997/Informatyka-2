@@ -1,5 +1,28 @@
 #include "Date.hpp"
 
+Date::Date(int _day, int _month , int _year)
+{
+    if (_year < 1970)
+    {
+        cout << "Wprowadzono date z przed ery komputerowej" << endl;
+        exit(0);
+    }
+    else if (_month <= 0 || _day <= 0)
+    {
+        cout << "Wproawdzono niepoprawną date" << endl;
+        exit(0);
+    }
+    day = _day;
+    month = _month;
+    year = _year;
+}
+
+Date::Date(const Date &date)
+{
+	day = date.day;
+	month = date.month;
+	year = date.year;
+}
 
 int Date::getDay()
 {
@@ -45,21 +68,6 @@ Date Date::daysToDate(int days)
     day = days+1;
     return day;
 
-}
-
-
-Date::Date(int _day, int _month , int _year)
-{
-    day = _day;
-    month = _month;
-    year = _year;
-}
-
-Date::Date(const Date &date)
-{
-	day = date.day;
-	month = date.month;
-	year = date.year;
 }
 
 Date Date::operator+(int days)
@@ -119,6 +127,5 @@ std::ostream &operator<<(std::ostream &out, const Date &date)
 	return out;
 
 }
-
 
 
