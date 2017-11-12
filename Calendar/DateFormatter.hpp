@@ -9,18 +9,18 @@ class DateFormatter{
     private:
 
     public:
-	//DateFormatter();
-	//~DateFormatter();
-    std::string Format(Date& d);
+    DateFormatter() {};
+    virtual ~DateFormatter() {};
+    virtual std::string Format(Date& date) = 0;
 };
 
 class ComputerDateFormatter : public DateFormatter{
     private:
 
     public:
-	//ComputerDateFormatter();
-	//~ComputerDateFormatter();
-	std::string Format(Date & D1);
+	ComputerDateFormatter() {};
+	virtual ~ComputerDateFormatter() {};
+	virtual std::string Format(Date & date) override;
 
 };
 
@@ -28,9 +28,9 @@ class GermanDateFormatter : public DateFormatter{
     private:
 
     public:
-	//GermanDateFormatter();
-	//~GermanDateFormatter();
-    std::string Format(Date & D1);
+	GermanDateFormatter() {};
+	virtual ~GermanDateFormatter() {};
+    virtual std::string Format(Date & date) override;
 };
 
 
