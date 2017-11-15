@@ -8,37 +8,34 @@ using std::cout;
 using std::endl;
 
 class Date{
-	private:
+private:
 
 	int day;
 	int month;
 	int year;
 
-	public:
+    int dateToDays() const;
+    Date daysToDate(int days);
 
-		Date(int _day = 1, int _month = 1, int _year = 1970);
-		Date(const Date & date);
+public:
 
-    	int getDay();
-    	int getMonth();
-    	int getYear();
+    Date(int _day = 1, int _month = 1, int _year = 1970);
+    Date(const Date & date);
 
-    	int dateToDays();
-        Date daysToDate(int days);
+    int getDay();
+    int getMonth();
+    int getYear();
 
-    	Date operator+(int days);
-    	Date operator-(int days);
-    	int operator-(Date &date);
-    	bool operator==(Date &date);
-    	bool operator!=(Date &date);
-    	Date operator+=(int days);
-    	Date operator-=(int days);
-    	friend std::ostream &operator<<(std::ostream &out, const Date &date);
+    Date operator+(int days);
+    Date operator-(int days);
+    int operator-(const Date &date) const;
+    bool operator==(const Date  &date) const;
+    bool operator!=(const Date &date) const;
+    Date operator+=(int days);
+    Date operator-=(int days);
+    friend std::ostream &operator<<(std::ostream &out, const Date &date);
 
 };
-
-int dateToDays(const Date& date);
-Date& daysToDate(int days);
 
 
 const std::array<const int, 12> daysInMonths = {
