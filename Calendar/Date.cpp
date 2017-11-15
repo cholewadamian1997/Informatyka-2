@@ -38,7 +38,7 @@ int Date::getYear()
 }
 
 
-int Date::dateToDays()
+int Date::dateToDays() const
 {
     int days = (year - 1970) * 365;
 
@@ -66,7 +66,7 @@ Date Date::daysToDate(int days)
     }
 
     day = days+1;
-    return day;
+    return *this;
 
 }
 
@@ -99,20 +99,20 @@ Date Date::operator-=(int days)
 }
 
 
-int Date::operator-(Date &date)
+int Date::operator-(const Date &date) const
 {
     int days = dateToDays() - date.dateToDays();
     return days;
 }
 
-bool Date::operator==(Date &date)
+bool Date::operator==(const Date &date) const
 {
     if (dateToDays() == date.dateToDays())
         return true;
     return false;
 }
 
-bool Date::operator!=(Date &date)
+bool Date::operator!=(const Date &date) const
 {
 	if (*this == date)
 		return false;
@@ -127,5 +127,4 @@ std::ostream &operator<<(std::ostream &out, const Date &date)
 	return out;
 
 }
-
 
