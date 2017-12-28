@@ -59,12 +59,16 @@ class Sender{
 
 private:
     Preferences receiver_preferences;
+    std::vector<Product> list_of_products;
 public:
-    Sender(ElementID);
-    virtual void sendProduct();
-    virtual void setPreferences(Preferences);
-    virtual Preferences getPreferences();
+    Sender(Preferences _receiver_preferences, std::vector<Product> _list_of_products) : receiver_preferences(_receiver_preferences), list_of_products(_list_of_products) {}
+    Sender(const Sender & sender) : receiver_preferences(sender.receiver_preferences), list_of_products(sender.list_of_products) {}
+    void sendProduct();
+    void setPreferences(Preferences);
+    Preferences getPreferences();
+    ~Sender() {}
 };
+
 
 class Storage{
 
@@ -105,16 +109,17 @@ public:
     virtual ElementID getId();
 };
 
-class Ramp : Sender{
+class Ramp : public Sender{
 
 private:
     ElementID id;
     Duration delivery_frequency;
 
 public:
-    Ramp(ElementID, Duration);
-    ElementID getId();
-    Duration getDeliveryFrequency();
+    Ramp(ElementID _id, Duration df, Preferences rp, std::vector<Product> lop) : id(_id), delivery_frequency(df), Sender(rp, lop) {}
+    Ramp(const Ramp & ramp, Preferences rp, std::vector<Product> lop) : id(ramp.id), delivery_frequency(ramp.delivery_frequency), Sender(rp, lop)  {}
+    ElementID getId() {return id;}
+    Duration getDeliveryFrequency() {return delivery_frequency;}
 
 };
 
