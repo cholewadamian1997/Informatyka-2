@@ -69,7 +69,7 @@ public:
 class Storage{
 
 private:
-    std::deque<IReceiver> products_deque;
+    std::deque<Product> products_deque;
 public:
     void push(Product);
     bool isEmpty();
