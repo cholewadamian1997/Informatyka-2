@@ -7,13 +7,16 @@
 #include <vector>
 #include <queue>
 #include <stack>
+#include <sstream>
+#include <cstdlib>
+#include <math.h>
 
 typedef int Time;
 typedef int Duration;
 typedef int ElementID;
 
-typedef enum{WORKER, STOREHOUSE} ReceiverType;
-typedef enum{LIFO, FIFO} QueueType;
+typedef enum{WORKER = 0, STOREHOUSE = 1} ReceiverType;
+typedef enum{LIFO = 0, FIFO = 1} QueueType;
 
 class Product{
 
@@ -47,6 +50,7 @@ public:
     void addReceiver(IReceiver*);
     void addReceiverWithPreferences(IReceiver*, double);
     void removeReceiver(IReceiver*);
+    IReceiver* drawReceiver();
     std::pair<IReceiver*, double> view();
 };
 
@@ -64,21 +68,28 @@ public:
 class IStorage{
 
 public:
-    virtual void push(Product) = 0;
-    virtual bool isEmpty() = 0;
-    virtual int size() = 0;
-    virtual Product view() = 0;
+    void push(Product);
+    bool isEmpty();
+    int size();
+    Product view();
 };
 
 class IQueue : IStorage{
 
 public:
-    virtual void push(Product) = 0;
-    virtual Product pop() = 0;
-    virtual bool isEmpty() = 0;
-    virtual int size() = 0;
-    virtual Product view() = 0;
-    virtual QueueType getQueueType() = 0;
+    void push(Product);
+    Product pop();
+    bool isEmpty();
+    int size();
+    Product view();
+    QueueType getQueueType();
+};
+
+class Queue : IQueue{
+
+private:
+    QueueType queue_type;
+    // SKONCZYC
 };
 
 class Storehouse : IReceiver{
@@ -147,3 +158,4 @@ public:
     bool isConected();
 };
 #endif // FACTORY_HPP
+
