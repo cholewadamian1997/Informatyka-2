@@ -51,7 +51,7 @@ IReceiver* Preferences::drawReceiver(){
     std::ostringstream ss;
     std::string str;
     int digits_after_dot;
-    int range = pow(10,digits_after_dot);
+    int max_size = 0;
 
     for(auto it=std::begin(preferences); it!=std::end(preferences); ++it){
 
@@ -68,7 +68,12 @@ IReceiver* Preferences::drawReceiver(){
             digits_after_dot = 0;
         else
             digits_after_dot = str.size()-2;
+
+        if (digits_after_dot > max_size)
+            max_size = digits_after_dot;
     }
+
+    int range = pow(10,max_size);
 
     srand( time( NULL ) );
     double drawn_number = (std::rand() & range);
