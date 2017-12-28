@@ -10,6 +10,7 @@
 #include <sstream>
 #include <cstdlib>
 #include <math.h>
+#include <functional>
 
 typedef int Time;
 typedef int Duration;
@@ -65,8 +66,10 @@ public:
     virtual Preferences getPreferences();
 };
 
-class IStorage{
+class Storage{
 
+private:
+    std::deque<IReceiver> products_deque;
 public:
     void push(Product);
     bool isEmpty();
@@ -74,7 +77,11 @@ public:
     Product view();
 };
 
-class IQueue : IStorage{
+class Queue : Storage{
+
+private:
+    QueueType queue_type;
+    std::function<Product()> pop_function;
 
 public:
     void push(Product);
@@ -85,18 +92,11 @@ public:
     QueueType getQueueType();
 };
 
-class Queue : IQueue{
-
-private:
-    QueueType queue_type;
-    // SKONCZYC
-};
-
 class Storehouse : IReceiver{
 
 private:
     ElementID id;
-    IStorage* storage;
+    Storage* storage;
 
 public:
     Storehouse(ElementID);
@@ -123,10 +123,10 @@ class Worker : Sender, IReceiver {
 private:
     ElementID id;
     Duration processing_time;
-    IQueue* queue;
+    Queue* queue;
 
 public:
-    Worker(ElementID, Duration, IQueue*);
+    Worker(ElementID, Duration, Queue*);
     virtual void ReceiveProduct(Product);
     virtual Product viewDepot();
     void doWork();
