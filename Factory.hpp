@@ -10,7 +10,6 @@
 #include <sstream>
 #include <cstdlib>
 #include <math.h>
-#include <functional>
 
 typedef int Time;
 typedef int Duration;
@@ -59,17 +58,18 @@ class Sender{
 
 private:
     Preferences receiver_preferences;
+    std::vector<Product> list_of_products;
 public:
-    Sender(ElementID);
-    virtual void sendProduct();
-    virtual void setPreferences(Preferences);
-    virtual Preferences getPreferences();
+    Sender(Preferences _receiver_preferences, std::vector<Product> _list_of_products) : receiver_preferences(_receiver_preferences), list_of_products(_list_of_products) {}
+    Sender(const Sender & sender) : receiver_preferences(sender.receiver_preferences), list_of_products(sender.list_of_products) {}
+    void sendProduct();
+    void setPreferences(Preferences);
+    Preferences getPreferences();
+    ~Sender() {}
 };
 
-class Storage{
+class IStorage{
 
-private:
-    std::deque<Product> products_deque;
 public:
     void push(Product);
     bool isEmpty();
@@ -77,11 +77,7 @@ public:
     Product view();
 };
 
-class Queue : Storage{
-
-private:
-    QueueType queue_type;
-    std::function<Product()> pop_function;
+class IQueue : IStorage{
 
 public:
     void push(Product);
@@ -92,11 +88,18 @@ public:
     QueueType getQueueType();
 };
 
+class Queue : IQueue{
+
+private:
+    QueueType queue_type;
+    // SKONCZYC
+};
+
 class Storehouse : IReceiver{
 
 private:
     ElementID id;
-    Storage* storage;
+    IStorage* storage;
 
 public:
     Storehouse(ElementID);
@@ -105,16 +108,17 @@ public:
     virtual ElementID getId();
 };
 
-class Ramp : Sender{
+class Ramp : public Sender{
 
 private:
     ElementID id;
     Duration delivery_frequency;
 
 public:
-    Ramp(ElementID, Duration);
-    ElementID getId();
-    Duration getDeliveryFrequency();
+    Ramp(ElementID _id, Duration df, Preferences rp, std::vector<Product> lop) : id(_id), delivery_frequency(df), Sender(rp, lop) {}
+    Ramp(const Ramp & ramp, Preferences rp, std::vector<Product> lop) : id(ramp.id), delivery_frequency(ramp.delivery_frequency), Sender(rp, lop)  {}
+    ElementID getId() {return id;}
+    Duration getDeliveryFrequency() {return delivery_frequency;}
 
 };
 
@@ -123,10 +127,10 @@ class Worker : Sender, IReceiver {
 private:
     ElementID id;
     Duration processing_time;
-    Queue* queue;
+    IQueue* queue;
 
 public:
-    Worker(ElementID, Duration, Queue*);
+    Worker(ElementID, Duration, IQueue*);
     virtual void ReceiveProduct(Product);
     virtual Product viewDepot();
     void doWork();
@@ -158,4 +162,3 @@ public:
     bool isConected();
 };
 #endif // FACTORY_HPP
-
