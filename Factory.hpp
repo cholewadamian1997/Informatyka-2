@@ -6,7 +6,6 @@
 #include <iterator>
 #include <vector>
 #include <queue>
-#include <stack>
 #include <sstream>
 #include <cstdlib>
 #include <math.h>
@@ -16,8 +15,8 @@ typedef int Time;
 typedef int Duration;
 typedef int ElementID;
 
-typedef enum{WORKER = 0, STOREHOUSE = 1} ReceiverType;
-typedef enum{LIFO = 0, FIFO = 1} QueueType;
+typedef enum{WORKER , STOREHOUSE} ReceiverType;
+typedef enum{LIFO, FIFO} QueueType;
 
 class Product{
 
@@ -25,16 +24,16 @@ private:
     ElementID id;
 
 public:
-    Product(ElementID _id) {id = _id;}
-    Product(const Product& product) {id = product.id;}
+    Product(ElementID);
+    Product(const Product&);
     ElementID getId();
 };
 
 class IReceiver{
 
 public:
-    virtual void ReceiveProduct(Product) = 0;
-    virtual Product viewDepot() = 0;
+    virtual void ReceiveProduct(const Product) = 0;
+    virtual void viewDepot() = 0;
     virtual ReceiverType getReceiverType() = 0;
     virtual ElementID getId() = 0;
 };
@@ -52,18 +51,22 @@ public:
     void addReceiverWithPreferences(IReceiver*, double);
     void removeReceiver(IReceiver*);
     IReceiver* drawReceiver();
-    std::pair<IReceiver*, double> view();
+    void view();
 };
 
 class Sender{
 
 private:
     Preferences receiver_preferences;
+    std::vector<Product> list_of_products;
 public:
-    Sender(ElementID);
-    virtual void sendProduct();
-    virtual void setPreferences(Preferences);
-    virtual Preferences getPreferences();
+    Sender(Preferences);
+    Sender(Preferences _receiver_preferences, std::vector<Product> _list_of_products) : receiver_preferences(_receiver_preferences), list_of_products(_list_of_products) {}
+    Sender(const Sender & sender) : receiver_preferences(sender.receiver_preferences), list_of_products(sender.list_of_products) {}
+    void sendProduct();
+    void setPreferences(Preferences);
+    Preferences getPreferences();
+    ~Sender() {}
 };
 
 class Storage{
@@ -71,24 +74,25 @@ class Storage{
 private:
     std::deque<Product> products_deque;
 public:
-    void push(Product);
+    virtual void push(const Product&);
     bool isEmpty();
-    int size();
-    Product view();
+    int storage_size();
+    void view();
 };
 
 class Queue : Storage{
 
 private:
+    std::deque<Product> products_deque;
     QueueType queue_type;
     std::function<Product()> pop_function;
 
 public:
-    void push(Product);
-    Product pop();
+    void push(const Product&);
+    void pop();
     bool isEmpty();
-    int size();
-    Product view();
+    int queueSize();
+    void view();
     QueueType getQueueType();
 };
 
@@ -100,9 +104,10 @@ private:
 
 public:
     Storehouse(ElementID);
-    void receiveProduct(Product);
-    virtual Product viewDepot();
-    virtual ElementID getId();
+    void receiveProduct(const Product);
+    void viewDepot();
+    ElementID getId();
+    ReceiverType getReceiverType();
 };
 
 class Ramp : Sender{
@@ -112,7 +117,8 @@ private:
     Duration delivery_frequency;
 
 public:
-    Ramp(ElementID, Duration);
+    Ramp(Preferences _receiver_preferences, ElementID _id, Duration _delivery_frequency)
+        : Sender(_receiver_preferences), id(_id), delivery_frequency(_delivery_frequency) {}
     ElementID getId();
     Duration getDeliveryFrequency();
 
@@ -127,12 +133,12 @@ private:
 
 public:
     Worker(ElementID, Duration, Queue*);
-    virtual void ReceiveProduct(Product);
-    virtual Product viewDepot();
+    void ReceiveProduct(const Product);
+    void viewDepot();
     void doWork();
     virtual ElementID getId();
     Duration getProcessingTime();
-    virtual ReceiverType getReceiverType();
+    ReceiverType getReceiverType();
 };
 
 class Factory {
@@ -158,4 +164,5 @@ public:
     bool isConected();
 };
 #endif // FACTORY_HPP
+
 
